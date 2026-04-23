@@ -39,6 +39,18 @@ const LOCAL_PACKAGES = {
 };
 
 function readPackage(pkg) {
+  // streamdown imports these plugins at runtime, but some versions may not
+  // declare them in dependency metadata. Add them for pnpm strict resolution.
+  if (pkg.name === "streamdown") {
+    pkg.dependencies = pkg.dependencies || {};
+    if (!pkg.dependencies["remark-cjk-friendly"]) {
+      pkg.dependencies["remark-cjk-friendly"] = "^1.0.6";
+    }
+    if (!pkg.dependencies["remark-cjk-friendly-gfm-strikethrough"]) {
+      pkg.dependencies["remark-cjk-friendly-gfm-strikethrough"] = "^2.0.1";
+    }
+  }
+
   if (process.env.COPILOTKIT_LOCAL) {
     for (const [name, localPath] of Object.entries(LOCAL_PACKAGES)) {
       if (pkg.dependencies?.[name]) {

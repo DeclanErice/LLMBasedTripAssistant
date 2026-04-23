@@ -7,7 +7,7 @@ settings:
 overrides:
   esbuild: ^0.27.3
 
-pnpmfileChecksum: cbqpffsi5wdwv7s6qdodwnypxi
+pnpmfileChecksum: dioecststuc4b4vjdxew2jsfhm
 
 importers:
 
@@ -87,6 +87,9 @@ importers:
       rehype-sanitize:
         specifier: ^6.0.0
         version: 6.0.0
+      remark-cjk-friendly:
+        specifier: ^1.0.6
+        version: 1.2.3(@types/mdast@4.0.4)(micromark-util-types@2.0.2)(micromark@4.0.2)(unified@11.0.5)
       remark-cjk-friendly-gfm-strikethrough:
         specifier: ^2.0.1
         version: 2.0.1(@types/mdast@4.0.4)(micromark-util-types@2.0.2)(micromark@4.0.2)(unified@11.0.5)

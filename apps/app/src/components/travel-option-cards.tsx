@@ -111,8 +111,20 @@ function extractQuestion(text: string): string {
     .map((line) => line.trim())
     .filter(Boolean);
 
-  const question = lines.find((line) => /[？?]$/.test(line));
-  return question || lines[0] || "请选择一个选项";
+  const questionByPunctuation = lines.find((line) => /[？?]$/.test(line));
+  if (questionByPunctuation) {
+    return questionByPunctuation;
+  }
+
+  const questionLikePattern =
+    /请问|多少|几天|预算|花费|费用|风格|偏好|交通|哪种|几位|入住|房型|出发|哪个城市|同行|人数/;
+  const questionByIntent = lines.find((line) => questionLikePattern.test(line));
+  if (questionByIntent) {
+    return questionByIntent;
+  }
+
+  // In multi-line tool messages, the prompt is often in later lines.
+  return lines[lines.length - 1] || "请选择一个选项";
 }
 
 function inferOptionsFromQuestion(question: string): string[] {
@@ -212,7 +224,18 @@ export function TravelOptionCards() {
   const latestAssistantText = recentAssistantTexts[0] || "";
 
   const fromLatest = extractOptions(latestAssistantText);
+  const parsedQuestion = extractQuestion(latestAssistantText);
+  const fromLatestQuestion = inferOptionsFromQuestion(parsedQuestion);
+
   let options = fromLatest;
+
+  if (options.length < 2 && fromLatestQuestion.length >= 2) {
+    options = fromLatestQuestion;
+  }
+
+  if (options.length < 2 && stateFallback.options.length >= 2) {
+    options = stateFallback.options;
+  }
 
   if (options.length < 2) {
     for (const text of recentAssistantTexts.slice(1)) {
@@ -224,18 +247,6 @@ export function TravelOptionCards() {
     }
   }
 
-  if (options.length < 2) {
-    const fallback = inferOptionsFromQuestion(extractQuestion(latestAssistantText));
-    if (fallback.length >= 2) {
-      options = fallback;
-    }
-  }
-
-  if (options.length < 2 && stateFallback.options.length >= 2) {
-    options = stateFallback.options;
-  }
-
-  const parsedQuestion = extractQuestion(latestAssistantText);
   const question = parsedQuestion || stateFallback.question || "请选择一个选项";
 
   if (options.length < 2) {

@@ -1,6 +1,6 @@
 """
 TripGenius 旅行规划 Agent
-使用 CopilotKit + LangGraph + MiniMax (OpenAI 兼容)
+使用 CopilotKit + LangGraph + OpenAI
 
 直接运行: python -m uvicorn main:app --port 8123 --host 0.0.0.0
 """
@@ -21,15 +21,17 @@ load_dotenv()
 
 # 获取配置
 api_key = os.getenv("OPENAI_API_KEY", "")
-base_url = os.getenv("OPENAI_BASE_URL", "https://api.minimax.io/v1")
-model_name = os.getenv("OPENAI_MODEL_NAME", "MiniMax-M2.7")
+base_url = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
+model_name = os.getenv("OPENAI_MODEL_NAME", "gpt-4.1-mini")
 
-# 创建 LLM（使用 OpenAI 兼容接口连接 MiniMax）
+# 创建 LLM
 llm = ChatOpenAI(
     model=model_name,
     api_key=api_key,
     base_url=base_url,
     temperature=0.7,
+    max_retries=6,
+    timeout=120,
 )
 
 # 使用 create_react_agent 创建 agent
@@ -42,8 +44,16 @@ agent = create_react_agent(
 
         用户交互流程：
         1. 用户说"我想去X"时，调用 start_travel_planning 开始规划
-        2. 根据用户的回复，逐步调用 confirm_start_date、confirm_departure_city、confirm_transport、confirm_travelers
-        3. 收集完信息后，调用 generate_itinerary 生成最终行程
+        2. 如果天数/预算/风格缺失，优先逐步补全：
+           - 天数缺失时调用 confirm_days
+           - 预算缺失时调用 confirm_budget
+           - 风格缺失时调用 confirm_style
+        3. 核心信息齐全后，继续调用 confirm_start_date、confirm_departure_city、confirm_transport、confirm_travelers
+        4. 收集完信息后，调用 generate_itinerary 生成最终行程
+
+        预算规则：
+        - 如果用户明确说"预算随便"、"不在意预算"，调用 confirm_budget 时使用 budget_mode="flexible"
+        - 如果用户给出明确预算数字，使用 budget_mode="fixed"
 
         旅行风格说明：
         - chill: 轻松休闲游，享受慢生活
@@ -56,6 +66,10 @@ agent = create_react_agent(
         - 使用中文回复
         - 行程生成后，告诉用户查看结果
         - 如果后端连接失败，提醒用户启动 RAG 后端
+        - 严禁向用户暴露内部推理过程、工具调用过程或函数名
+        - 不要说“我要调用某工具”或“按照流程我需要”
+        - 只输出面向用户的自然语言问题、确认或结果
+        - 当问题存在固定备选答案时，在末尾添加“可选项：A / B / C”
     """,
 )
 

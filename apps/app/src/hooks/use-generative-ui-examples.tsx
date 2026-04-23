@@ -17,7 +17,6 @@ import {
   BarChartProps,
 } from "@/components/generative-ui/charts/bar-chart";
 import { MeetingTimePicker } from "@/components/generative-ui/meeting-time-picker";
-import { ToolReasoning } from "@/components/tool-rendering";
 
 export const useGenerativeUIExamples = () => {
   const { theme, setTheme } = useTheme();
@@ -54,17 +53,9 @@ export const useGenerativeUIExamples = () => {
     render: BarChart,
   });
 
-  // Default Tool Rendering (backend tool UI)
-  const ignoredTools = [
-    "render_a2ui", // Rendered by A2UI streaming, not as a tool card
-    "generate_a2ui", // Legacy: rendered by A2UI, not as a tool card
-    "log_a2ui_event", // Internal A2UI event tracker
-  ];
+  // Hide backend tool rendering to avoid exposing internal implementation details.
   useDefaultRenderTool({
-    render: ({ name, status, parameters }) => {
-      if (ignoredTools.includes(name)) return <></>;
-      return <ToolReasoning name={name} status={status} args={parameters} />;
-    },
+    render: () => <></>,
   });
 
   // Frontend Tools (direct frontend state manipulation)
