@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:platform.minimax.io)",
+      "WebSearch",
+      "Bash(python -c \"import anthropic; print\\('anthropic:', anthropic.__version__\\)\")",
+      "Bash(python -c \"import fastapi; print\\('fastapi:', fastapi.__version__\\)\")",
+      "Bash(python -c \"import faiss; print\\('faiss-cpu: installed'\\)\")",
+      "Bash(python -c \"from sentence_transformers import SentenceTransformer; print\\('sentence-transformers: installed'\\)\")",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:docs.ag-ui.com)",
+      "Bash(python -c \"from ag_ui.core import RunAgentInput; import inspect; print\\(inspect.getsource\\(RunAgentInput\\)\\)\")",
+      "WebFetch(domain:langchain-ai.github.io)",
+      "WebFetch(domain:docs.langchain.com)",
+      "WebFetch(domain:docs.copilotkit.io)",
+      "WebFetch(domain:docs.copilotkit.ai)",
+      "Read(//d C:/Users/Rin/.openclaw/workspace/projects/tripAssistant/trip-genuis/apps/**)",
+      "Bash(python -c \"from langchain.agents import AgentState; print\\(AgentState.__annotations__\\)\")",
+      "Bash(python -c \"from langchain.agents import AgentState; print\\(AgentState.__annotations__ if hasattr\\(AgentState, '__annotations__'\\) else 'no annotations'\\)\")",
+      "Bash(pip show:*)",
+      "Bash(git commit -m ':*)",
+      "Bash(git remote:*)",
+      "Bash(git push:*)",
+      "Bash(git add:*)",
+      "Bash(git pull:*)",
+      "WebFetch(domain:minimax-algeng-chat-tts-us.oss-us-east-1.aliyuncs.com)",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('src/travel.py', encoding='utf-8'\\).read\\(\\)\\); print\\('travel.py OK'\\)\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('main.py', encoding='utf-8'\\).read\\(\\)\\); print\\('main.py OK'\\)\")",
+      "Bash(python -c ' *)",
+      "WebFetch(domain:www.npmjs.com)",
+      "Read(//c/Users/Rin/.claude/**)",
+      "PowerShell(cd \"c:\\\\Users\\\\Rin\\\\.openclaw\\\\workspace\\\\projects\\\\tripAssistant\"; $env:PYTHONIOENCODING=\"utf-8\"; venv\\\\Scripts\\\\python.exe -c \"import json; f=open\\('data/processed/travel_data.json', encoding='utf-8'\\); data=json.load\\(f\\); print\\(f'OK, {len\\(data\\)} entries'\\)\" 2>&1)",
+      "PowerShell(cd \"c:\\\\Users\\\\Rin\\\\.openclaw\\\\workspace\\\\projects\\\\tripAssistant\"; $env:PYTHONIOENCODING=\"utf-8\"; venv\\\\Scripts\\\\python.exe scripts\\\\fix_json_quotes.py 2>&1)",
+      "PowerShell(cd \"c:\\\\Users\\\\Rin\\\\.openclaw\\\\workspace\\\\projects\\\\tripAssistant\"; $env:PYTHONIOENCODING=\"utf-8\"; venv\\\\Scripts\\\\python.exe scripts\\\\init_db.py 2>&1)"
+    ]
+  }
+}

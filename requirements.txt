@@ -1,0 +1,35 @@
+# Core
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+python-dotenv>=1.0.0
+
+# LLM & Embedding
+anthropic>=0.40.0
+transformers>=4.38.0
+torch>=2.2.0
+
+# Vector DB
+faiss-cpu>=1.8.0
+sentence-transformers>=2.3.0
+
+# RAG
+langchain>=1.0.0
+langchain-community>=0.3.0
+
+# Agent (CopilotKit + LangGraph)
+langgraph>=1.0.0
+langgraph-cli[inmem]>=0.4.0
+langchain-openai>=1.0.0
+langsmith>=0.4.0
+requests>=2.31.0
+
+# AG-UI Protocol
+ag-ui-protocol>=0.1.5
+
+# Data processing
+pandas>=2.2.0
+numpy>=1.26.0
+pydantic>=2.5.0
+
+# Utils
+tqdm>=4.66.0
