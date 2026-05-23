@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from .query_parser import TravelQueryParser, parse_travel_query
 from .retriever import TravelRetriever, create_retriever
 from .generator import TravelGenerator, create_generator
+from src.routing import enrich_itinerary_with_traffic
 
 
 @dataclass
@@ -111,6 +112,7 @@ class RAGChain:
                     style=request.style,
                     context=context,
                 )
+                itinerary = enrich_itinerary_with_traffic(itinerary, request.destination)
                 debug_info["generation"] = {"success": True, "has_itinerary": bool(itinerary)}
             except Exception as e:
                 debug_info["generation"] = {"success": False, "error": str(e)}
@@ -165,6 +167,7 @@ class RAGChain:
                 style=style,
                 context=context,
             )
+            itinerary = enrich_itinerary_with_traffic(itinerary, destination)
             return itinerary
 
         return {}

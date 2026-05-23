@@ -285,8 +285,14 @@ async def generate_conversation_flow(
                         output += f"Day {day.get('day', '?')}: {day.get('theme', '')}\n"
                         if day.get("morning"):
                             output += f"  🌅 上午：{day['morning'].get('spot', '')}\n"
+                        travel_am = day.get("travel_to_afternoon")
+                        if travel_am:
+                            output += f"  🚇 交通：{travel_am.get('mode', '')} · {travel_am.get('tip', '')}\n"
                         if day.get("afternoon"):
                             output += f"  🌆 下午：{day['afternoon'].get('spot', '')}\n"
+                        travel_pm = day.get("travel_to_evening")
+                        if travel_pm:
+                            output += f"  🚇 交通：{travel_pm.get('mode', '')} · {travel_pm.get('tip', '')}\n"
                         if day.get("evening"):
                             output += f"  🌃 晚上：{day['evening'].get('spot', '')}\n"
                         if day.get("food"):
